@@ -1,0 +1,351 @@
+{
+    "companies": [
+        {
+            "id": "tesla",
+            "name": "Tesla",
+            "logo": "🔋",
+            "model": "Model 3 / Model Y",
+            "report_year": 2023,
+            "previous_year": 2022,
+            "claims": [
+                {
+                    "text": "Tesla vehicles emit 0g of CO₂ at the tailpipe during operation.",
+                    "type": "NUMERIC",
+                    "pillar": "use_phase",
+                    "verified": true,
+                    "confidence": 0.95
+                },
+                {
+                    "text": "We are committed to accelerating the world's transition to sustainable energy.",
+                    "type": "VAGUE",
+                    "pillar": "general",
+                    "verified": false,
+                    "confidence": 0.88
+                },
+                {
+                    "text": "Gigafactory Nevada runs on 100% renewable energy.",
+                    "type": "NUMERIC",
+                    "pillar": "manufacturing",
+                    "verified": true,
+                    "confidence": 0.91
+                },
+                {
+                    "text": "Battery pack energy density improved by 16% in 2023 versus 2022.",
+                    "type": "NUMERIC",
+                    "pillar": "manufacturing",
+                    "verified": true,
+                    "confidence": 0.93
+                },
+                {
+                    "text": "We have a responsible mineral sourcing program.",
+                    "type": "VAGUE",
+                    "pillar": "raw_materials",
+                    "verified": false,
+                    "confidence": 0.82
+                },
+                {
+                    "text": "82% of end-of-life battery cells are recycled through our partner network.",
+                    "type": "NUMERIC",
+                    "pillar": "end_of_life",
+                    "verified": true,
+                    "confidence": 0.89
+                },
+                {
+                    "text": "We purchase renewable energy certificates (RECs) to offset Scope 2 emissions.",
+                    "type": "OFFSET_BACKED",
+                    "pillar": "offsets",
+                    "verified": true,
+                    "confidence": 0.94
+                },
+                {
+                    "text": "Scope 3 supply chain emissions are under active assessment.",
+                    "type": "VAGUE",
+                    "pillar": "supply_chain",
+                    "verified": false,
+                    "confidence": 0.76
+                }
+            ],
+            "pillar_scores": {
+                "raw_materials": 52,
+                "manufacturing": 84,
+                "supply_chain": 38,
+                "use_phase": 91,
+                "end_of_life": 70,
+                "offsets": 60
+            },
+            "offset_dependency": 28,
+            "offset_quality": "VCS",
+            "prior_year_scores": {
+                "raw_materials": 48,
+                "manufacturing": 78,
+                "supply_chain": 32,
+                "use_phase": 89,
+                "end_of_life": 65,
+                "offsets": 55
+            },
+            "regulatory_alignment": {
+                "GRI": true,
+                "CSRD": false,
+                "SEC_Climate": false,
+                "TCFD": true
+            },
+            "grid_carbon_intensity_gco2_kwh": 387,
+            "country": "US"
+        },
+        {
+            "id": "rivian",
+            "name": "Rivian",
+            "logo": "🌿",
+            "model": "R1T / R1S",
+            "report_year": 2023,
+            "previous_year": 2022,
+            "claims": [
+                {
+                    "text": "Rivian is committed to being carbon neutral by 2040.",
+                    "type": "OFFSET_BACKED",
+                    "pillar": "offsets",
+                    "verified": false,
+                    "confidence": 0.87
+                },
+                {
+                    "text": "Our manufacturing facility in Normal, IL sources 100% renewable electricity.",
+                    "type": "NUMERIC",
+                    "pillar": "manufacturing",
+                    "verified": true,
+                    "confidence": 0.92
+                },
+                {
+                    "text": "We work with suppliers to improve environmental sustainability.",
+                    "type": "VAGUE",
+                    "pillar": "supply_chain",
+                    "verified": false,
+                    "confidence": 0.81
+                },
+                {
+                    "text": "Lithium sourcing follows our responsible sourcing guidelines.",
+                    "type": "VAGUE",
+                    "pillar": "raw_materials",
+                    "verified": false,
+                    "confidence": 0.79
+                },
+                {
+                    "text": "Each R1T produces 63% fewer lifecycle emissions than a comparable ICE truck.",
+                    "type": "NUMERIC",
+                    "pillar": "use_phase",
+                    "verified": true,
+                    "confidence": 0.90
+                },
+                {
+                    "text": "We offset 100% of our corporate travel and Scope 1 emissions via forest conservation credits.",
+                    "type": "OFFSET_BACKED",
+                    "pillar": "offsets",
+                    "verified": true,
+                    "confidence": 0.93
+                },
+                {
+                    "text": "Battery recycling partnerships are being established with third parties.",
+                    "type": "VAGUE",
+                    "pillar": "end_of_life",
+                    "verified": false,
+                    "confidence": 0.75
+                }
+            ],
+            "pillar_scores": {
+                "raw_materials": 31,
+                "manufacturing": 80,
+                "supply_chain": 28,
+                "use_phase": 79,
+                "end_of_life": 35,
+                "offsets": 44
+            },
+            "offset_dependency": 55,
+            "offset_quality": "Unverified",
+            "prior_year_scores": {
+                "raw_materials": 28,
+                "manufacturing": 70,
+                "supply_chain": 22,
+                "use_phase": 74,
+                "end_of_life": 28,
+                "offsets": 38
+            },
+            "regulatory_alignment": {
+                "GRI": false,
+                "CSRD": false,
+                "SEC_Climate": false,
+                "TCFD": false
+            },
+            "grid_carbon_intensity_gco2_kwh": 412,
+            "country": "US"
+        },
+        {
+            "id": "byd",
+            "name": "BYD",
+            "logo": "⚡",
+            "model": "Atto 3 / Han EV",
+            "report_year": 2023,
+            "previous_year": 2022,
+            "claims": [
+                {
+                    "text": "BYD's Blade Battery eliminates cobalt entirely, reducing mining-related environmental impact by 100%.",
+                    "type": "NUMERIC",
+                    "pillar": "raw_materials",
+                    "verified": true,
+                    "confidence": 0.96
+                },
+                {
+                    "text": "Manufacturing plants reduced Scope 1 emissions by 18.4% in 2023 versus 2021 baseline.",
+                    "type": "NUMERIC",
+                    "pillar": "manufacturing",
+                    "verified": true,
+                    "confidence": 0.94
+                },
+                {
+                    "text": "We disclose full Tier 1 and Tier 2 supplier emissions as part of our Scope 3 reporting.",
+                    "type": "NUMERIC",
+                    "pillar": "supply_chain",
+                    "verified": true,
+                    "confidence": 0.91
+                },
+                {
+                    "text": "Han EV achieves 15.5 kWh/100km energy consumption under CLTC standard.",
+                    "type": "NUMERIC",
+                    "pillar": "use_phase",
+                    "verified": true,
+                    "confidence": 0.95
+                },
+                {
+                    "text": "94.3% battery material recovery rate achieved through direct recycling partnerships.",
+                    "type": "NUMERIC",
+                    "pillar": "end_of_life",
+                    "verified": true,
+                    "confidence": 0.93
+                },
+                {
+                    "text": "We strive to minimize our carbon footprint across all operations.",
+                    "type": "VAGUE",
+                    "pillar": "general",
+                    "verified": false,
+                    "confidence": 0.80
+                },
+                {
+                    "text": "Zero carbon offset purchases — all reductions are operational and technology-driven.",
+                    "type": "NUMERIC",
+                    "pillar": "offsets",
+                    "verified": true,
+                    "confidence": 0.97
+                }
+            ],
+            "pillar_scores": {
+                "raw_materials": 88,
+                "manufacturing": 82,
+                "supply_chain": 78,
+                "use_phase": 85,
+                "end_of_life": 91,
+                "offsets": 95
+            },
+            "offset_dependency": 3,
+            "offset_quality": "None",
+            "prior_year_scores": {
+                "raw_materials": 82,
+                "manufacturing": 75,
+                "supply_chain": 70,
+                "use_phase": 80,
+                "end_of_life": 86,
+                "offsets": 92
+            },
+            "regulatory_alignment": {
+                "GRI": true,
+                "CSRD": false,
+                "SEC_Climate": false,
+                "TCFD": true
+            },
+            "grid_carbon_intensity_gco2_kwh": 581,
+            "country": "CN"
+        },
+        {
+            "id": "vw_id",
+            "name": "Volkswagen ID",
+            "logo": "🚗",
+            "model": "ID.4 / ID.7",
+            "report_year": 2023,
+            "previous_year": 2022,
+            "claims": [
+                {
+                    "text": "ID.4 production is carbon-neutral at our Zwickau plant, certified by TÜV NORD.",
+                    "type": "OFFSET_BACKED",
+                    "pillar": "manufacturing",
+                    "verified": true,
+                    "confidence": 0.91
+                },
+                {
+                    "text": "We have reduced cobalt content per battery by 50% versus our 2018 baseline.",
+                    "type": "NUMERIC",
+                    "pillar": "raw_materials",
+                    "verified": true,
+                    "confidence": 0.93
+                },
+                {
+                    "text": "Scope 3 module 1 (purchased goods) emissions declined by 12% in 2023.",
+                    "type": "NUMERIC",
+                    "pillar": "supply_chain",
+                    "verified": true,
+                    "confidence": 0.90
+                },
+                {
+                    "text": "ID.4 lifecycle CO₂ footprint is 37.1 tonnes on EU average grid mix.",
+                    "type": "NUMERIC",
+                    "pillar": "use_phase",
+                    "verified": true,
+                    "confidence": 0.95
+                },
+                {
+                    "text": "70% of battery materials will be recovered from returned batteries by 2025.",
+                    "type": "NUMERIC",
+                    "pillar": "end_of_life",
+                    "verified": false,
+                    "confidence": 0.83
+                },
+                {
+                    "text": "We have purchased high-quality Gold Standard offsets for residual Scope 1 emissions.",
+                    "type": "OFFSET_BACKED",
+                    "pillar": "offsets",
+                    "verified": true,
+                    "confidence": 0.92
+                },
+                {
+                    "text": "VW Group is committed to becoming a net-zero business by 2050.",
+                    "type": "VAGUE",
+                    "pillar": "general",
+                    "verified": false,
+                    "confidence": 0.84
+                }
+            ],
+            "pillar_scores": {
+                "raw_materials": 72,
+                "manufacturing": 75,
+                "supply_chain": 68,
+                "use_phase": 88,
+                "end_of_life": 60,
+                "offsets": 72
+            },
+            "offset_dependency": 38,
+            "offset_quality": "Gold Standard",
+            "prior_year_scores": {
+                "raw_materials": 65,
+                "manufacturing": 68,
+                "supply_chain": 60,
+                "use_phase": 84,
+                "end_of_life": 52,
+                "offsets": 68
+            },
+            "regulatory_alignment": {
+                "GRI": true,
+                "CSRD": true,
+                "SEC_Climate": false,
+                "TCFD": true
+            },
+            "grid_carbon_intensity_gco2_kwh": 295,
+            "country": "DE"
+        }
+    ]
+}

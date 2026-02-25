@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutoTruth — EV Greenwashing Detection Engine</title>
+  <meta name="description" content="AutoTruth scores EV manufacturer sustainability claims using AI-powered lifecycle transparency analysis. Detect greenwashing in seconds." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body class="landing-body">
+
+  <!-- ── Animated background ── -->
+  <div class="bg-grid"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- ── Nav ── -->
+  <nav class="nav">
+    <div class="nav-brand">
+      <span class="brand-icon">🌿</span>
+      <span class="brand-name">Auto<span class="brand-accent">Truth</span></span>
+    </div>
+    <div class="nav-links">
+      <a href="#how-it-works">How It Works</a>
+      <a href="#pillars">Lifecycle Pillars</a>
+      <a href="#pdf-analyzer">Analyze PDF</a>
+      <a href="/dashboard" class="btn-nav">Launch Dashboard →</a>
+    </div>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <section class="hero">
+    <div class="hero-badge">
+      <span class="pulse-dot"></span> AI-Powered Greenwashing Detection
+    </div>
+    <h1 class="hero-title">
+      Does "Zero Emissions"<br>
+      <span class="gradient-text">Actually Mean Zero?</span>
+    </h1>
+    <p class="hero-sub">
+      AutoTruth analyzes EV manufacturer sustainability disclosures across <strong>6 lifecycle pillars</strong>, 
+      detects offset dependency, and generates a verifiable <strong>Lifecycle Transparency Score (LTS)</strong> 
+      — so you can separate facts from marketing.
+    </p>
+
+    <!-- Company Selector -->
+    <div class="company-selector glass-card">
+      <p class="selector-label">⚡ Select a Company to Analyze</p>
+      <input
+        type="text"
+        id="company-search"
+        class="company-search"
+        placeholder="Search company (e.g., Tesla, BMW, Audi)"
+        oninput="filterCompanies(this.value)" />
+      <div class="model-select-row">
+        <label for="model-select">Select specific model (optional):</label>
+        <select id="model-select" class="model-select" disabled>
+          <option value="">All models (company-level analysis)</option>
+        </select>
+      </div>
+      <div class="company-grid" id="company-grid">
+        {% for company in companies %}
+        <button class="company-btn" data-id="{{ company.id }}" onclick="selectCompany('{{ company.id }}', this)">
+          <span class="company-logo">{{ company.logo }}</span>
+          <span class="company-name">{{ company.name }}</span>
+          <span class="company-model">{{ company.model }}</span>
+        </button>
+        {% endfor %}
+      </div>
+      <div class="selector-actions">
+        <button class="btn-primary" id="analyze-btn" onclick="analyzeSelected()" disabled>
+          <span class="btn-icon">🔍</span> Analyze Transparency
+        </button>
+        <span class="or-divider">or</span>
+        <button class="btn-secondary" onclick="window.location='/dashboard'">
+          Compare All Companies →
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PDF Analyzer ── -->
+  <section class="section pdf-analyzer-section" id="pdf-analyzer">
+    <div class="section-header">
+      <h2>Analyze Your Sustainability PDF</h2>
+      <p>Upload a report and get instant disclosure quality metrics for clarification.</p>
+    </div>
+    <div class="pdf-analyzer-card glass-card">
+      <div class="pdf-input-row">
+        <input type="file" id="pdf-file-input" accept=".pdf,application/pdf" class="pdf-file-input" />
+        <button class="btn-primary" id="pdf-analyze-btn" onclick="analyzeUploadedPDF()">
+          Analyze Uploaded PDF
+        </button>
+      </div>
+      <p class="pdf-note">Supports text-based PDFs up to 60MB and up to 30 pages for extraction.</p>
+
+      <div class="pdf-status" id="pdf-status" style="display:none;"></div>
+      <div class="pdf-domain-gate" id="pdf-domain-gate" style="display:none;">
+        <p id="pdf-domain-message">This report may not be EV domain.</p>
+        <div class="pdf-domain-actions">
+          <button class="btn-secondary" type="button" onclick="resetPdfUploadFlow()">Re-upload EV Report</button>
+          <button class="btn-primary" type="button" onclick="continueWithNonEv()">Continue Anyway</button>
+        </div>
+      </div>
+
+      <div class="pdf-result" id="pdf-result" style="display:none;">
+        <div class="pdf-metrics-grid">
+          <div class="pdf-metric-item">
+            <span>LTS</span>
+            <strong id="pdf-lts">--</strong>
+          </div>
+          <div class="pdf-metric-item">
+            <span>Risk Tier</span>
+            <strong id="pdf-risk">--</strong>
+          </div>
+          <div class="pdf-metric-item">
+            <span>Claims Extracted</span>
+            <strong id="pdf-claims">--</strong>
+          </div>
+          <div class="pdf-metric-item">
+            <span>Pages Processed</span>
+            <strong id="pdf-pages">--</strong>
+          </div>
+        </div>
+
+        <div class="pdf-ratio-row">
+          <div class="pdf-ratio-item">Numeric: <strong id="pdf-ratio-numeric">--</strong></div>
+          <div class="pdf-ratio-item">Vague: <strong id="pdf-ratio-vague">--</strong></div>
+          <div class="pdf-ratio-item">Offset-Backed: <strong id="pdf-ratio-offset">--</strong></div>
+        </div>
+        <div class="pdf-domain-summary" id="pdf-domain-summary">Domain detection: --</div>
+
+        <div class="pdf-term-guide">
+          <p><strong>Simple Metric Guide</strong></p>
+          <p><strong>LTS:</strong> Overall transparency score out of 100.</p>
+          <p><strong>Risk Tier:</strong> How likely the report has weak or unclear sustainability claims.</p>
+          <p><strong>Claims Extracted:</strong> Number of statements found and analyzed from your PDF.</p>
+          <p><strong>Pages Processed:</strong> Number of pages scanned for text and claims.</p>
+          <p><strong>Numeric:</strong> Claims with clear numbers (for example %, tonnes, kWh).</p>
+          <p><strong>Vague:</strong> Claims with general language and limited measurable proof.</p>
+          <p><strong>Offset-Backed:</strong> Claims based on offsets/credits instead of direct reductions.</p>
+        </div>
+
+        <div class="pdf-insight-box">
+          <p><strong>Quick Clarification</strong></p>
+          <p id="pdf-insight-text">--</p>
+        </div>
+        <div class="pdf-actions">
+          <button class="btn-secondary" id="pdf-dashboard-btn" onclick="openPdfBreakdown()" disabled>
+            View Full Breakdown in Dashboard
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── How It Works ── -->
+  <section class="section" id="how-it-works">
+    <div class="section-header">
+      <h2>How AutoTruth Works</h2>
+      <p>A practical seven-step flow from selection or upload to explainable EV transparency scoring.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card glass-card">
+        <div class="step-num">01</div>
+        <div class="step-icon">🏢</div>
+        <h3>Select Make/Model</h3>
+        <p>Choose a company and optionally a specific EV model. If no model is selected, AutoTruth runs company-level analysis.</p>
+      </div>
+      <div class="step-card glass-card">
+        <div class="step-num">02</div>
+        <div class="step-icon">📄</div>
+        <h3>Upload &amp; Parse PDF</h3>
+        <p>Upload a PDF (up to 60 MB, 30 pages). Text is extracted using multiple parsers to improve reliability on real-world reports.</p>
+      </div>
+      <div class="step-card glass-card">
+        <div class="step-num">03</div>
+        <div class="step-icon">🔭</div>
+        <h3>Domain Detection Layer</h3>
+        <p>The system detects EV relevance first. For non-EV reports, users can re-upload or continue anyway with full transparency.</p>
+      </div>
+      <div class="step-card glass-card">
+        <div class="step-num">04</div>
+        <div class="step-icon">🧠</div>
+        <h3>Claim Classification</h3>
+        <p>Statements are classified as <span class="tag numeric">NUMERIC</span>, <span class="tag vague">VAGUE</span>, or <span class="tag offset">OFFSET-BACKED</span> and mapped to lifecycle pillars.</p>
+      </div>
+      <div class="step-card glass-card">
+        <div class="step-num">05</div>
+        <div class="step-icon">⚖️</div>
+        <h3>Pillar &amp; Risk Scoring</h3>
+        <p>AutoTruth scores six EV lifecycle pillars, offset dependency, and claim quality to produce a risk-aware transparency profile.</p>
+      </div>
+      <div class="step-card glass-card">
+        <div class="step-num">06</div>
+        <div class="step-icon">📈</div>
+        <h3>Drift + Confidence</h3>
+        <p>It computes trend drift and confidence interval so users can see stability, uncertainty, and movement over time.</p>
+      </div>
+      <div class="step-card glass-card">
+        <div class="step-num">07</div>
+        <div class="step-icon">📊</div>
+        <h3>Explainable Dashboard</h3>
+        <p>Results are shown with clear metric descriptions, claim-level reasoning, and full model/company breakdown for decision-ready review.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Pillars ── -->
+  <section class="section" id="pillars">
+    <div class="section-header">
+      <h2>6 Lifecycle Pillars Evaluated</h2>
+      <p>AutoTruth covers the full EV lifecycle — not just tailpipe emissions</p>
+    </div>
+    <div class="pillars-grid">
+      <div class="pillar-card glass-card">
+        <div class="pillar-icon">⛏️</div>
+        <h4>Raw Material Extraction</h4>
+        <div class="pillar-weight">20%</div>
+        <p>Lithium, cobalt, nickel mining practices, child labor risk, IRMA certification</p>
+      </div>
+      <div class="pillar-card glass-card">
+        <div class="pillar-icon">🏭</div>
+        <h4>Manufacturing & Energy</h4>
+        <div class="pillar-weight">20%</div>
+        <p>Scope 1 & 2 factory emissions, renewable energy use, production kgCO₂/vehicle</p>
+      </div>
+      <div class="pillar-card glass-card">
+        <div class="pillar-icon">🔗</div>
+        <h4>Supply Chain (Scope 3)</h4>
+        <div class="pillar-weight">15%</div>
+        <p>Tier 1 & 2 supplier emissions, procurement standards, auditing coverage</p>
+      </div>
+      <div class="pillar-card glass-card">
+        <div class="pillar-icon">⚡</div>
+        <h4>Use Phase</h4>
+        <div class="pillar-weight">20%</div>
+        <p>Grid carbon intensity, kWh/km efficiency, lifecycle CO₂ vs. ICE equivalent</p>
+      </div>
+      <div class="pillar-card glass-card">
+        <div class="pillar-icon">♻️</div>
+        <h4>Battery End-of-Life</h4>
+        <div class="pillar-weight">15%</div>
+        <p>Recycling rate, second-life use, material recovery %, disposal partnerships</p>
+      </div>
+      <div class="pillar-card glass-card">
+        <div class="pillar-icon">🌳</div>
+        <h4>Offset Strategy</h4>
+        <div class="pillar-weight">10%</div>
+        <p>Offset quality tier, dependency %, additionality, permanence verification</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer class="footer">
+    <div class="footer-brand">
+      🌿 <strong>AutoTruth</strong> — Lifecycle Transparency Engine
+    </div>
+    <p class="footer-sub">Built for ESG analysts, journalists, and climate-conscious consumers.</p>
+  </footer>
+
+  <script>
+    const DASHBOARD_BASE = window.location.origin.includes("5001") ? "" : "http://localhost:5001";
+    document.querySelectorAll('a[href="/dashboard"]').forEach(link => {
+      link.href = `${DASHBOARD_BASE}/dashboard`;
+    });
+    document.querySelectorAll('button.btn-secondary').forEach(btn => {
+      const onClickAttr = btn.getAttribute("onclick") || "";
+      if (onClickAttr.includes("/dashboard")) {
+        btn.onclick = () => window.location = `${DASHBOARD_BASE}/dashboard`;
+      }
+    });
+
+    let selectedId = null;
+    let selectedModel = '';
+    let pendingNonEvAnalysis = null;
+
+    async function selectCompany(id, el) {
+      document.querySelectorAll('.company-btn').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      selectedId = id;
+      selectedModel = '';
+      document.getElementById('analyze-btn').disabled = false;
+      await loadModelsForCompany(id);
+    }
+
+    function filterCompanies(query) {
+      const q = (query || '').trim().toLowerCase();
+      document.querySelectorAll('.company-btn').forEach(btn => {
+        const name = (btn.querySelector('.company-name')?.textContent || '').toLowerCase();
+        btn.style.display = !q || name.includes(q) ? 'flex' : 'none';
+      });
+    }
+
+    function analyzeSelected() {
+      if (!selectedId) return;
+      const modelParam = selectedModel ? `&model=${encodeURIComponent(selectedModel)}` : '';
+      window.location = `${DASHBOARD_BASE}/dashboard?company=${selectedId}${modelParam}`;
+    }
+
+    async function loadModelsForCompany(companyId) {
+      const modelSelect = document.getElementById('model-select');
+      modelSelect.innerHTML = '<option value="">All models (company-level analysis)</option>';
+      modelSelect.disabled = true;
+
+      try {
+        const res = await fetch(`${DASHBOARD_BASE}/api/models/${companyId}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        const models = data.models || [];
+        if (!models.length) return;
+
+        models.forEach(m => {
+          const opt = document.createElement('option');
+          opt.value = m;
+          opt.textContent = m;
+          modelSelect.appendChild(opt);
+        });
+        modelSelect.disabled = false;
+      } catch (_) {
+        // keep company-level fallback
+      }
+    }
+
+    document.getElementById('model-select').addEventListener('change', (e) => {
+      selectedModel = e.target.value || '';
+    });
+
+    let lastPDFAnalysis = null;
+
+    function summarizePDFInsight(data) {
+      const vagueRatio = Math.round((data.claim_ratio?.vague || 0) * 100);
+      const numericRatio = Math.round((data.claim_ratio?.numeric || 0) * 100);
+      const risk = data.risk?.label || "Unknown";
+      return `This report scored ${data.lts} with ${risk} risk. Numeric disclosure share is ${numericRatio}% and vague disclosure share is ${vagueRatio}%.`;
+    }
+
+    function commitPdfAnalysis(data) {
+      const status = document.getElementById('pdf-status');
+      const result = document.getElementById('pdf-result');
+      const gate = document.getElementById('pdf-domain-gate');
+
+      lastPDFAnalysis = data;
+      localStorage.setItem('autotruth_uploaded_analysis', JSON.stringify(data));
+      document.getElementById('pdf-dashboard-btn').disabled = false;
+      document.getElementById('pdf-lts').textContent = data.lts;
+      document.getElementById('pdf-risk').textContent = data.risk?.label || '--';
+      document.getElementById('pdf-claims').textContent = data.claims_extracted || '--';
+      document.getElementById('pdf-pages').textContent = data.pages_processed || '--';
+      document.getElementById('pdf-ratio-numeric').textContent = `${Math.round((data.claim_ratio?.numeric || 0) * 100)}%`;
+      document.getElementById('pdf-ratio-vague').textContent = `${Math.round((data.claim_ratio?.vague || 0) * 100)}%`;
+      document.getElementById('pdf-ratio-offset').textContent = `${Math.round((data.claim_ratio?.offset || 0) * 100)}%`;
+      const domainState = data.domain_detection?.is_ev_domain ? 'EV domain confirmed' : 'Likely non-EV domain';
+      document.getElementById('pdf-domain-summary').textContent =
+        `Domain detection: ${domainState} (relevance score: ${data.domain_detection?.ev_relevance_score ?? 0})`;
+      document.getElementById('pdf-insight-text').textContent = summarizePDFInsight(data);
+
+      status.className = 'pdf-status success';
+      status.textContent = `Analysis complete for: ${data.source_file}`;
+      gate.style.display = 'none';
+      result.style.display = 'block';
+    }
+
+    function continueWithNonEv() {
+      if (!pendingNonEvAnalysis) return;
+      const approved = {
+        ...pendingNonEvAnalysis,
+        domain_detection: {
+          ...(pendingNonEvAnalysis.domain_detection || {}),
+          continued_by_user: true
+        }
+      };
+      commitPdfAnalysis(approved);
+      pendingNonEvAnalysis = null;
+    }
+
+    function resetPdfUploadFlow() {
+      pendingNonEvAnalysis = null;
+      lastPDFAnalysis = null;
+      document.getElementById('pdf-file-input').value = '';
+      document.getElementById('pdf-result').style.display = 'none';
+      document.getElementById('pdf-domain-gate').style.display = 'none';
+      document.getElementById('pdf-status').style.display = 'none';
+      document.getElementById('pdf-dashboard-btn').disabled = true;
+      localStorage.removeItem('autotruth_uploaded_analysis');
+    }
+
+    async function analyzeUploadedPDF() {
+      const fileInput = document.getElementById('pdf-file-input');
+      const status = document.getElementById('pdf-status');
+      const result = document.getElementById('pdf-result');
+      const gate = document.getElementById('pdf-domain-gate');
+      const file = fileInput.files[0];
+
+      if (!file) {
+        status.style.display = 'block';
+        status.className = 'pdf-status error';
+        status.textContent = 'Please select a PDF file first.';
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      status.style.display = 'block';
+      status.className = 'pdf-status loading';
+      status.textContent = 'Analyzing PDF...';
+      result.style.display = 'none';
+      gate.style.display = 'none';
+      pendingNonEvAnalysis = null;
+
+      try {
+        const res = await fetch(`${DASHBOARD_BASE}/api/analyze-pdf`, {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!res.ok) {
+          let msg = 'PDF analysis failed';
+          const raw = await res.text();
+          try {
+            const parsed = JSON.parse(raw);
+            msg = parsed.description || parsed.message || msg;
+          } catch (_) {
+            msg = raw || msg;
+          }
+          throw new Error(msg);
+        }
+
+        const data = await res.json();
+        const isEv = data.domain_detection?.is_ev_domain !== false;
+
+        if (!isEv) {
+          pendingNonEvAnalysis = data;
+          status.className = 'pdf-status warning';
+          status.textContent = 'Domain check: this looks like a non-EV report.';
+          document.getElementById('pdf-domain-message').textContent =
+            `${data.domain_detection?.recommendation || 'This report may not be EV domain.'} (EV relevance score: ${data.domain_detection?.ev_relevance_score ?? 0})`;
+          gate.style.display = 'block';
+          return;
+        }
+
+        commitPdfAnalysis(data);
+      } catch (err) {
+        status.className = 'pdf-status error';
+        status.textContent = `Could not analyze this PDF. ${err.message}`;
+      }
+    }
+
+    function openPdfBreakdown() {
+      if (!lastPDFAnalysis) return;
+      window.location = `${DASHBOARD_BASE}/dashboard?source=upload`;
+    }
+  </script>
+</body>
+</html>

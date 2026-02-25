@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AutoTruth Intelligence Platform</title>
+    <meta name="description"
+        content="Institutional-grade sustainability intelligence platform with lifecycle transparency, risk analytics, and explainable AI." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+</head>
+
+<body class="dashboard-body ai-platform-body">
+    <div class="platform-bg">
+        <div class="platform-grid"></div>
+        <div class="platform-flow flow-1"></div>
+        <div class="platform-flow flow-2"></div>
+        <div class="platform-glow glow-a"></div>
+        <div class="platform-glow glow-b"></div>
+        <div class="platform-particles">
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+        </div>
+    </div>
+
+    <nav class="nav platform-nav">
+        <a class="nav-brand" href="/">
+            <span class="brand-icon">AT</span>
+            <span class="brand-name">Auto<span class="brand-accent">Truth</span></span>
+        </a>
+        <div class="platform-tagline">Quantifying Sustainability Disclosure Integrity.</div>
+        <div class="nav-links">
+            <span class="nav-mode" id="mode-label">Intelligence Mode</span>
+            <button class="btn-nav-sm" id="toggle-compare-btn" onclick="toggleCompareMode()">Compare Mode</button>
+            <a href="/" class="btn-nav-sm">Back</a>
+        </div>
+    </nav>
+
+    <div class="dash-layout platform-layout">
+        <aside class="sidebar platform-sidebar" id="sidebar">
+            <p class="sidebar-title">Universe Coverage</p>
+            <div class="sidebar-companies" id="sidebar-companies"></div>
+            <div class="sidebar-compare-hint" id="compare-hint" style="display:none;">
+                Select up to 4 issuers for institutional comparison.
+            </div>
+        </aside>
+
+        <main class="dash-main platform-main" id="dash-main">
+            <section class="intel-hero" id="intel-hero">
+                <div class="intel-hero-left">
+                    <p class="module-label">Transparency Intelligence Engine (TIE)</p>
+                    <h1 id="company-title">Select issuer</h1>
+                    <p class="hero-sub" id="company-model">Lifecycle Disclosure Matrix ready for analysis</p>
+                </div>
+                <div class="intel-hero-right">
+                    <div class="hero-kpi-card" data-tooltip="Live composite transparency benchmark">
+                        <div class="hero-kpi-label">Transparency Index</div>
+                        <div class="hero-kpi-value" id="hero-transparency">--</div>
+                        <div class="hero-kpi-delta" id="hero-change">--</div>
+                    </div>
+                    <div class="hero-kpi-card" data-tooltip="Relative ranking versus EV peer universe">
+                        <div class="hero-kpi-label">Industry Percentile</div>
+                        <div class="hero-kpi-value" id="hero-percentile">--</div>
+                        <div class="hero-kpi-delta" id="hero-rank-badge">Top --</div>
+                    </div>
+                    <div class="hero-kpi-card mini-meta">
+                        <div class="meta-chip" id="report-year">Report --</div>
+                        <div class="meta-chip" id="esg-badge">ESG --</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="glass-card platform-card metric-guide-card">
+                <p class="card-label">How To Read This Dashboard</p>
+                <div class="metric-guide-grid">
+                    <p><strong>Transparency Index / LTS:</strong> The main score out of 100. Higher means clearer and more verifiable reporting.</p>
+                    <p><strong>Risk Probability:</strong> Estimated chance that claims are unclear, incomplete, or heavily offset-driven.</p>
+                    <p><strong>Radar Chart:</strong> Shows which lifecycle areas are strong and weak at a glance.</p>
+                    <p><strong>Pillar Depth Matrix:</strong> Level 0-4 view of how detailed each lifecycle pillar is.</p>
+                    <p><strong>Offset Integrity Ring:</strong> Compares offset dependence and offset quality in one visual.</p>
+                    <p><strong>Claim Density Timeline:</strong> Pattern of claim confidence and impact through the report.</p>
+                    <p><strong>Volatility Index:</strong> Stability of transparency performance over periods.</p>
+                    <p><strong>Temporal Drift:</strong> Year-over-year movement by pillar. Positive means improving, negative means declining.</p>
+                    <p><strong>Why This Score:</strong> Exact score formula with bonuses and penalties.</p>
+                    <p><strong>AI Insights + Risk Drivers:</strong> Plain-language reasons behind the score and the biggest risk factors.</p>
+                    <p><strong>Claim Reasoning:</strong> Claim-by-claim explanation with rewrite guidance.</p>
+                    <p><strong>Confidence Interval:</strong> Expected score range based on quality and consistency of evidence.</p>
+                </div>
+            </section>
+
+            <div class="loading-state platform-loading" id="loading-state">
+                <div class="shimmer-block lg"></div>
+                <div class="shimmer-grid">
+                    <div class="shimmer-block"></div>
+                    <div class="shimmer-block"></div>
+                    <div class="shimmer-block"></div>
+                </div>
+                <p>Running Greenwashing Risk Analyzer and Offset Integrity Evaluator...</p>
+            </div>
+
+            <div class="empty-state" id="empty-state">
+                <div class="empty-icon">TIE</div>
+                <h2>Select a Company to Begin</h2>
+                <p>Choose an EV issuer from the left panel to activate intelligence modules.</p>
+            </div>
+
+            <div class="dash-content platform-content" id="dash-content" style="display:none;">
+                <section class="intelligence-layout">
+                    <div class="zone zone-a">
+                        <article class="glass-card platform-card score-core">
+                            <p class="card-label">Lifecycle Transparency Score</p>
+                            <div class="gauge-wrap">
+                                <canvas id="gauge-canvas" width="220" height="220"></canvas>
+                                <div class="gauge-center">
+                                    <div class="gauge-score" id="gauge-score">--</div>
+                                    <div class="gauge-label">/ 100</div>
+                                </div>
+                            </div>
+                            <div class="confidence-interval" id="confidence-interval">Confidence Interval: --</div>
+                        </article>
+
+                        <article class="glass-card platform-card">
+                            <p class="card-label">Greenwashing Risk Analyzer (GRA)</p>
+                            <div class="metric-inline">
+                                <span>Risk Probability</span>
+                                <strong id="risk-prob-value">--%</strong>
+                            </div>
+                            <div class="risk-track">
+                                <div class="risk-fill" id="risk-prob-bar"></div>
+                            </div>
+                            <p class="metric-note" id="risk-desc">--</p>
+                        </article>
+
+                        <article class="glass-card platform-card">
+                            <p class="card-label">Transparency Momentum</p>
+                            <div class="momentum-indicator" id="momentum-indicator">--</div>
+                            <div class="metric-inline">
+                                <span>Industry Percentile Rank</span>
+                                <strong id="percentile-rank">--</strong>
+                            </div>
+                        </article>
+
+                        <article class="glass-card platform-card">
+                            <p class="card-label">Regulatory Alignment</p>
+                            <div class="chip-row" id="regulatory-row"></div>
+                            <div class="chip-row" id="esg-badges"></div>
+                        </article>
+                    </div>
+
+                    <div class="zone zone-b">
+                        <article class="glass-card platform-card radar-card">
+                            <div class="card-head">
+                                <p class="card-label">Lifecycle Disclosure Matrix (LDM)</p>
+                            </div>
+                            <div class="radar-wrap"><canvas id="radar-canvas"></canvas></div>
+                        </article>
+
+                        <article class="glass-card platform-card">
+                            <div class="card-head">
+                                <p class="card-label">Pillar Depth Matrix</p>
+                            </div>
+                            <div class="heatmap-matrix" id="heatmap-matrix"></div>
+                            <div class="depth-list" id="depth-list"></div>
+                        </article>
+
+                        <article class="glass-card platform-card split-card">
+                            <div>
+                                <p class="card-label">Offset Integrity Evaluator (OIE)</p>
+                                <div class="ring-wrap"><canvas id="offset-ring-canvas" width="180" height="180"></canvas></div>
+                                <div class="offset-quality-badge" id="offset-quality-badge">--</div>
+                                <p class="metric-note" id="offset-quality-desc">--</p>
+                            </div>
+                            <div>
+                                <p class="card-label">Claim Density Timeline</p>
+                                <div class="spark-wrap"><canvas id="claim-sparkline-canvas" height="90"></canvas></div>
+                                <div class="metric-inline">
+                                    <span>Offset Dependency</span>
+                                    <strong id="offset-pct">--%</strong>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="glass-card platform-card split-card">
+                            <div>
+                                <p class="card-label">Transparency Volatility Index</p>
+                                <div class="spark-wrap"><canvas id="volatility-canvas" height="110"></canvas></div>
+                            </div>
+                            <div>
+                                <p class="card-label">Temporal Drift</p>
+                                <p class="metric-note" id="drift-years">--</p>
+                                <div class="spark-wrap"><canvas id="drift-canvas" height="110"></canvas></div>
+                            </div>
+                        </article>
+                    </div>
+
+                    <div class="zone zone-c">
+                        <article class="glass-card platform-card">
+                            <p class="card-label">Why This Score?</p>
+                            <div class="breakdown-list" id="tie-breakdown"></div>
+                            <div class="impact-calc" id="impact-calc"></div>
+                        </article>
+
+                        <article class="glass-card platform-card">
+                            <p class="card-label">AI Insights Summary</p>
+                            <div class="ai-summary" id="ai-summary"></div>
+                            <div class="risk-driver-list" id="risk-drivers"></div>
+                        </article>
+
+                        <article class="glass-card platform-card">
+                            <p class="card-label">Explainable Claim Reasoning</p>
+                            <div class="claim-reasoning" id="claim-reasoning"></div>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="claims-section glass-card platform-card">
+                    <div class="claims-header">
+                        <p class="card-label">Greenwash Fingerprint</p>
+                        <div class="claims-filter">
+                            <button class="filter-btn active" onclick="filterClaims('all', this)">All</button>
+                            <button class="filter-btn" onclick="filterClaims('NUMERIC', this)">Numeric</button>
+                            <button class="filter-btn" onclick="filterClaims('VAGUE', this)">Vague</button>
+                            <button class="filter-btn" onclick="filterClaims('OFFSET_BACKED', this)">Offset</button>
+                        </div>
+                    </div>
+                    <div class="claims-table-wrap">
+                        <table class="claims-table">
+                            <thead>
+                                <tr>
+                                    <th>Claim</th>
+                                    <th>Type</th>
+                                    <th>Pillar</th>
+                                    <th>Impact</th>
+                                    <th>Confidence</th>
+                                    <th>Rewrite Suggestion</th>
+                                </tr>
+                            </thead>
+                            <tbody id="claims-tbody"></tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <div class="compare-content platform-content" id="compare-content" style="display:none;">
+                <section class="glass-card platform-card compare-hero">
+                    <div>
+                        <p class="module-label">Cross-Issuer Intelligence</p>
+                        <h2>Institutional Comparison Grid</h2>
+                        <p>Overlayed lifecycle scores, risk deltas, and offset integrity differentials.</p>
+                    </div>
+                </section>
+
+                <section class="compare-layout">
+                    <article class="glass-card platform-card">
+                        <p class="card-label">Overlay Radar Comparison</p>
+                        <div class="radar-wrap"><canvas id="compare-radar-canvas"></canvas></div>
+                    </article>
+                    <article class="glass-card platform-card">
+                        <p class="card-label">Pillar Delta Visualization</p>
+                        <div class="spark-wrap"><canvas id="compare-delta-canvas" height="180"></canvas></div>
+                    </article>
+                </section>
+
+                <section class="compare-grid" id="compare-grid"></section>
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/js/dashboard.js"></script>
+</body>
+
+</html>
