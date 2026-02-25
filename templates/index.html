@@ -264,7 +264,8 @@
   </footer>
 
   <script>
-    const DASHBOARD_BASE = window.location.origin.includes("5001") ? "" : "http://localhost:5001";
+    const isLocalHost = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+    const DASHBOARD_BASE = isLocalHost && window.location.port !== "5001" ? "http://localhost:5001" : "";
     document.querySelectorAll('a[href="/dashboard"]').forEach(link => {
       link.href = `${DASHBOARD_BASE}/dashboard`;
     });
