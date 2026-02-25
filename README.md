@@ -7,6 +7,10 @@ AutoTruth is a Flask-based web app that analyzes EV sustainability disclosures a
 - PDF report analysis (with EV domain detection)
 - Interactive dashboard visualizations and explainable metrics
 
+## Live App
+
+- Production URL: [https://auto-truth-eco-hackathon.onrender.com](https://auto-truth-eco-hackathon.onrender.com)
+
 ## 1. Project Structure
 
 ```text
@@ -103,7 +107,7 @@ This repo already includes `render.yaml`.
 3. Connect your GitHub repo.
 4. Render will detect `render.yaml` and create the web service.
 5. Wait for build + deploy.
-6. Open generated URL (example):
+6. Open deployed URL:
    - `https://auto-truth-eco-hackathon.onrender.com`
 
 Configured Render start command:
