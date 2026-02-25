@@ -145,8 +145,6 @@ git push origin main
 - Dashboard layout: `templates/dashboard.html`
 
 ---
+Author
 
-If you want, next I can also generate:
-- a short **user guide README** (non-technical)
-- a separate **developer setup doc** (`docs/DEVELOPMENT.md`)
-- API docs in Swagger/OpenAPI format
+Naina Vismi N
